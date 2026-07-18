@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>House Price Prediction</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="background">
+
+  <div class="container">
+
+    <div class="header">
+      <i class="fa-solid fa-house header-icon"></i>
+      <h1>House Price Prediction</h1>
+      <div class="divider"><span></span><i class="fa-solid fa-diamond"></i><span></span></div>
+      <p class="subtitle">Predict your dream home's value instantly</p>
+    </div>
+
+    <div class="card">
+      <form method="POST" action="/">
+
+        <div class="form-row">
+          <label><i class="fa-solid fa-bed"></i> Bedrooms</label>
+          <input type="number" name="bedrooms" min="1" step="1"
+                 value="{{ request.form.get('bedrooms', 3) }}" required>
+        </div>
+
+        <div class="form-row">
+          <label><i class="fa-solid fa-bath"></i> Bathrooms</label>
+          <input type="number" name="bathrooms" min="1" step="1"
+                 value="{{ request.form.get('bathrooms', 2) }}" required>
+        </div>
+
+        <div class="form-row">
+          <label><i class="fa-solid fa-ruler"></i> Living Area (sq ft)</label>
+          <input type="number" name="sqft_living" min="1000" step="1000"
+                 value="{{ request.form.get('sqft_living', 2200) }}" required>
+        </div>
+
+        <div class="form-row">
+          <label><i class="fa-solid fa-house-chimney"></i> Floors</label>
+          <input type="number" name="floors" min="1" step="1"
+                 value="{{ request.form.get('floors', 2) }}" required>
+        </div>
+
+        <div class="form-row">
+          <label><i class="fa-solid fa-water"></i> Waterfront</label>
+          <select name="waterfront">
+            <option value="No" {% if request.form.get('waterfront')=='No' %}selected{% endif %}>No</option>
+            <option value="Yes" {% if request.form.get('waterfront', 'Yes')=='Yes' %}selected{% endif %}>Yes</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label><i class="fa-solid fa-expand"></i> House Area (sq ft)</label>
+          <input type="number" name="sqft_lot" min="1000" step="100"
+                 value="{{ request.form.get('sqft_lot', 1800) }}" required>
+        </div>
+
+        <div class="form-row">
+          <label><i class="fa-solid fa-calendar-days"></i> Built Year</label>
+          <input type="number" name="yr_built" min="1900" max="2026" step="1"
+                 value="{{ request.form.get('yr_built', 2018) }}" required>
+        </div>
+
+        <div class="form-row">
+          <label><i class="fa-solid fa-wrench"></i> Renovation Year</label>
+          <input type="number" name="yr_renovated" min="0" max="2026" step="1"
+                 value="{{ request.form.get('yr_renovated', 0) }}">
+        </div>
+
+        <div class="form-row">
+          <label><i class="fa-solid fa-school"></i> Schools Nearby</label>
+          <input type="number" name="schools_nearby" min="0" step="1"
+                 value="{{ request.form.get('schools_nearby', 4) }}">
+        </div>
+
+        <div class="form-row">
+          <label><i class="fa-solid fa-plane"></i> Airport Distance (km)</label>
+          <input type="number" name="airport_distance" min="0" step="1"
+                 value="{{ request.form.get('airport_distance', 12) }}">
+        </div>
+
+        <button type="submit" class="predict-btn">
+          <i class="fa-solid fa-calculator"></i> PREDICT PRICE
+        </button>
+
+      </form>
+    </div>
+
+    {% if prediction is not none %}
+    <div class="result-box">
+      <div class="result-icon"><i class="fa-solid fa-house"></i></div>
+      <p class="result-label">Estimated House Price</p>
+      <h2 class="result-value" data-value="{{ prediction }}">&#8377; {{ "{:,.0f}".format(prediction) }}</h2>
+    </div>
+    {% endif %}
+
+    <div class="footer-bar">
+      <div class="footer-item">
+        <i class="fa-solid fa-brain"></i>
+        <div>
+          <p class="footer-title">Model Used</p>
+          <p class="footer-value">Linear Regressor</p>
+        </div>
+      </div>
+      <div class="footer-item">
+        <i class="fa-solid fa-chart-column"></i>
+        <div>
+          <p class="footer-title">Model Accuracy (R&sup2;)</p>
+          <p class="footer-value">0.66821</p>
+        </div>
+      </div>
+      <div class="footer-item">
+        <i class="fa-solid fa-bullseye"></i>
+        <div>
+          <p class="footer-title">Prediction Type</p>
+          <p class="footer-value">Regression</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="developer"><i class="fa-regular fa-heart"></i> Developed by <span>Tisha Jadav</span></p>
+
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
